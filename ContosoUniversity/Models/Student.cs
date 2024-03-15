@@ -15,10 +15,11 @@ namespace ContosoUniversity.Models
 
         public void ViewAllStudents(SchoolContext dbContext)
         {
-            Console.WriteLine("All Students:");
+            Console.WriteLine("All Students:\n");
+            Console.WriteLine("ID\tLast Name\tFirst Name\tEnrollment Date\n");
             foreach (var student in dbContext.Students)
             {
-                Console.WriteLine($"ID {student.ID}, LastName {student.LastName}, FirstName {student.FirstMidName}, EnrollmentDate {student.EnrollmentDate}");
+                Console.WriteLine($"{student.ID}\t{student.LastName.PadRight(15)}\t{student.FirstMidName.PadRight(12)}\t{student.EnrollmentDate}");
             }
             Console.WriteLine("\nPress any key to continue...");
             Console.ReadLine();

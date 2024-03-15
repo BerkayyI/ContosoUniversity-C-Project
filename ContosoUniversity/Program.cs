@@ -17,7 +17,7 @@ namespace ContosoUniversity
         {
             while (true)
             {
-                Console.WriteLine("Contoso University Management System");
+                Console.WriteLine("Contoso University Admininstrator Management System");
                 Console.WriteLine("------------------------------------");
                 Console.WriteLine("1. Manage Students");
                 Console.WriteLine("2. Manage Courses");
@@ -39,18 +39,23 @@ namespace ContosoUniversity
                         ManageStudents();
                         break;
                     case 2:
+                        Console.Clear();
                         ManageCourses();
                         break;
                     case 3:
+                        Console.Clear();
                         ManageInstructors();
                         break;
                     case 4:
+                        Console.Clear();
                         ManageDepartments();
                         break;
                     case 5:
+                        Console.Clear();
                         Console.WriteLine("Exiting the program...");
                         return;
                     default:
+                        Console.Clear();
                         Console.WriteLine("Invalid choice. Please try again.");
                         break;
                 }
@@ -60,6 +65,7 @@ namespace ContosoUniversity
         private void ManageStudents()
         {
             Student student = new Student();
+
             while (true)
             {
                 Console.WriteLine("Student Management");
@@ -108,8 +114,49 @@ namespace ContosoUniversity
 
         private void ManageCourses()
         {
-            // Implement logic to manage courses (CRUD operations, etc.)
-            Console.WriteLine("Manage Courses");
+            Course course = new Course();
+            while (true)
+            {
+                Console.WriteLine("Manage Courses");
+                Console.WriteLine("1. View All Courses");
+                Console.WriteLine("2. Add Course");
+                Console.WriteLine("3. Update Course");
+                Console.WriteLine("4. Delete Course");
+                Console.WriteLine("5. Back to Main Menu");
+
+                if (!int.TryParse(Console.ReadLine(), out int choice))
+                {
+                    Console.WriteLine("Invalid input. Please enter a number.");
+                    continue;
+                }
+
+                switch (choice)
+                {
+                    case 1:
+                        Console.Clear();
+                        course.ViewAllCourses(dbContext);
+                        break;
+                    case 2:
+                        Console.Clear();
+                        course.AddCourse(dbContext);
+                        break;
+                    case 3:
+                        Console.Clear();
+                        course.UpdateCourse(dbContext);
+                        break;
+                    case 4:
+                        Console.Clear();
+                        course.DeleteCourse(dbContext);
+                        break;
+                    case 5:
+                        Console.Clear();
+                        return;
+                    default:
+                        Console.Clear();
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
+            }
         }
 
         private void ManageInstructors()
