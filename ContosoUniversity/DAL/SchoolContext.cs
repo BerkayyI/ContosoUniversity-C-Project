@@ -32,14 +32,13 @@ namespace ContosoUniversity.DAL
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var currentDirectory = Directory.GetCurrentDirectory();
-                var dbPath = Path.Combine(currentDirectory, @"db\school.db");
-
+                var dbPath = @"C:\Users\benbe\source\repos\ContosoUniversity\ContosoUniversity\db\school.db";
                 optionsBuilder.UseSqlite($"Data Source={dbPath}");
             }
 
             base.OnConfiguring(optionsBuilder);
         }
+
 
     }
 }

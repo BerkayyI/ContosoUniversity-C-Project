@@ -1,12 +1,128 @@
-﻿using System;
-
+﻿using ContosoUniversity.DAL;
+using System;
+using ContosoUniversity.Models;
 namespace ContosoUniversity
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        private SchoolContext dbContext = new SchoolContext();
+
+        public static void Main(string[] args)
         {
-            // Your program logic goes here
+            Program program = new Program();
+            program.Main_Menu();
         }
+
+        public void Main_Menu()
+        {
+            while (true)
+            {
+                Console.WriteLine("Contoso University Management System");
+                Console.WriteLine("------------------------------------");
+                Console.WriteLine("1. Manage Students");
+                Console.WriteLine("2. Manage Courses");
+                Console.WriteLine("3. Manage Instructors");
+                Console.WriteLine("4. Manage Departments");
+                Console.WriteLine("5. Exit");
+
+                int choice;
+                if (!int.TryParse(Console.ReadLine(), out choice))
+                {
+                    Console.WriteLine("Invalid input. Please enter a number.");
+                    continue;
+                }
+
+                switch (choice)
+                {
+                    case 1:
+                        Console.Clear();
+                        ManageStudents();
+                        break;
+                    case 2:
+                        ManageCourses();
+                        break;
+                    case 3:
+                        ManageInstructors();
+                        break;
+                    case 4:
+                        ManageDepartments();
+                        break;
+                    case 5:
+                        Console.WriteLine("Exiting the program...");
+                        return;
+                    default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
+            }
+        }
+
+        private void ManageStudents()
+        {
+            Student student = new Student();
+            while (true)
+            {
+                Console.WriteLine("Student Management");
+                Console.WriteLine("------------------");
+                Console.WriteLine("1. View All Students");
+                Console.WriteLine("2. Add Student");
+                Console.WriteLine("3. Update Student");
+                Console.WriteLine("4. Delete Student");
+                Console.WriteLine("5. Back to Main Menu");
+
+                int choice;
+                if (!int.TryParse(Console.ReadLine(), out choice))
+                {
+                    Console.WriteLine("Invalid input. Please enter a number.");
+                    continue;
+                }
+
+                switch (choice)
+                {
+                    case 1:
+                        Console.Clear();
+                        student.ViewAllStudents(dbContext);
+                        break;
+                    case 2:
+                        Console.Clear();
+                        student.AddStudent(dbContext);
+                        break;
+                    case 3:
+                        Console.Clear();
+                        student.UpdateStudent(dbContext);
+                        break;
+                    case 4:
+                        Console.Clear();
+                        student.DeleteStudent(dbContext);
+                        break;
+                    case 5:
+                        Console.Clear();
+                        return;
+                    default:
+                        Console.Clear();  
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
+            }
+        }
+
+        private void ManageCourses()
+        {
+            // Implement logic to manage courses (CRUD operations, etc.)
+            Console.WriteLine("Manage Courses");
+        }
+
+        private void ManageInstructors()
+        {
+            // Implement logic to manage instructors (CRUD operations, etc.)
+            Console.WriteLine("Manage Instructors");
+        }
+
+        private void ManageDepartments()
+        {
+            // Implement logic to manage departments (CRUD operations, etc.)
+            Console.WriteLine("Manage Departments");
+        }
+
     }
 }
