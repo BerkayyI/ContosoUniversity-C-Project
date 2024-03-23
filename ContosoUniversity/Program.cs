@@ -1,6 +1,7 @@
 ﻿using ContosoUniversity.DAL;
 using System;
 using ContosoUniversity.Models;
+using System.Collections.Generic;
 namespace ContosoUniversity
 {
     public class Program
@@ -23,7 +24,8 @@ namespace ContosoUniversity
                 Console.WriteLine("2. Manage Courses");
                 Console.WriteLine("3. Manage Instructors");
                 Console.WriteLine("4. Manage Departments");
-                Console.WriteLine("5. Exit");
+                Console.WriteLine("5. Search Engine");
+                Console.WriteLine("6. Exit");
 
                 int choice;
                 if (!int.TryParse(Console.ReadLine(), out choice))
@@ -52,6 +54,10 @@ namespace ContosoUniversity
                         break;
                     case 5:
                         Console.Clear();
+                        ManagaSearchEngine();
+                        break;
+                    case 6:
+                        Console.Clear();
                         Console.WriteLine("Exiting the program...");
                         return;
                     default:
@@ -61,11 +67,17 @@ namespace ContosoUniversity
                 }
             }
         }
+        private void ManagaSearchEngine()
+        {
+            List<Student> students = new List<Student>();
+            Teilnehmer SearchEngine = new Teilnehmer();
+            SearchEngine.SearchAndDisplayResults(students);
+        }
 
         private void ManageStudents()
         {
             Student student = new Student();
-
+           
             while (true)
             {
                 Console.WriteLine("Student Management");

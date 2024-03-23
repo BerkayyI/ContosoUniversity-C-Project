@@ -3,6 +3,7 @@ using System;
 using ContosoUniversity.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContosoUniversity.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20240323210553_AddBirthDateAndEmail")]
+    partial class AddBirthDateAndEmail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.0");
@@ -29,16 +31,11 @@ namespace ContosoUniversity.Migrations
                     b.Property<int>("DepartmentID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("StudentID")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("CourseID");
-
-                    b.HasIndex("StudentID");
 
                     b.ToTable("Courses");
                 });
@@ -157,18 +154,6 @@ namespace ContosoUniversity.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Students");
-                });
-
-            modelBuilder.Entity("ContosoUniversity.Models.Course", b =>
-                {
-                    b.HasOne("ContosoUniversity.Models.Student", null)
-                        .WithMany("EnrolledCourses")
-                        .HasForeignKey("StudentID");
-                });
-
-            modelBuilder.Entity("ContosoUniversity.Models.Student", b =>
-                {
-                    b.Navigation("EnrolledCourses");
                 });
 #pragma warning restore 612, 618
         }
