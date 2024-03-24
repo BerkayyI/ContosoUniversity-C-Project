@@ -3,6 +3,7 @@ using System;
 using ContosoUniversity.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContosoUniversity.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20240324083109_BetterStructureDB")]
+    partial class BetterStructureDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.0");
@@ -77,16 +79,13 @@ namespace ContosoUniversity.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Grade")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("StudentID")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("EnrollmentId");
-
-                    b.HasIndex("CourseID");
-
-                    b.HasIndex("StudentID");
 
                     b.ToTable("Enrollments");
                 });
@@ -157,33 +156,47 @@ namespace ContosoUniversity.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("ContosoUniversity.Models.Enrollment", b =>
+            modelBuilder.Entity("CourseStudent", b =>
                 {
-                    b.HasOne("ContosoUniversity.Models.Course", "Course")
-                        .WithMany("Enrollments")
+                    b.Property<int>("CourseID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EnrolledCoursesCourseID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("CourseID", "EnrolledCoursesCourseID");
+
+                    b.ToTable("CourseStudent");
+                });
+
+            modelBuilder.Entity("StudentCourse", b =>
+                {
+                    b.Property<int>("StudentID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CourseID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("StudentID", "CourseID");
+
+                    b.HasIndex("CourseID");
+
+                    b.ToTable("StudentCourses", (string)null);
+                });
+
+            modelBuilder.Entity("StudentCourse", b =>
+                {
+                    b.HasOne("ContosoUniversity.Models.Course", null)
+                        .WithMany()
                         .HasForeignKey("CourseID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ContosoUniversity.Models.Student", "Student")
-                        .WithMany("Enrollments")
+                    b.HasOne("ContosoUniversity.Models.Student", null)
+                        .WithMany()
                         .HasForeignKey("StudentID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("ContosoUniversity.Models.Course", b =>
-                {
-                    b.Navigation("Enrollments");
-                });
-
-            modelBuilder.Entity("ContosoUniversity.Models.Student", b =>
-                {
-                    b.Navigation("Enrollments");
                 });
 #pragma warning restore 612, 618
         }

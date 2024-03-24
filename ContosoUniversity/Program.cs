@@ -2,6 +2,7 @@
 using System;
 using ContosoUniversity.Models;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 namespace ContosoUniversity
 {
     public class Program
@@ -54,7 +55,9 @@ namespace ContosoUniversity
                         break;
                     case 5:
                         Console.Clear();
-                        ManagaSearchEngine();
+                        
+                        Teilnehmer teilnehmer = new Teilnehmer(dbContext);
+                        SearchStudents(teilnehmer);
                         break;
                     case 6:
                         Console.Clear();
@@ -67,12 +70,58 @@ namespace ContosoUniversity
                 }
             }
         }
-        private void ManagaSearchEngine()
+
+        private static void SearchStudents(Teilnehmer teilnehmer)
         {
-            List<Student> students = new List<Student>();
-            Teilnehmer SearchEngine = new Teilnehmer();
-            SearchEngine.SearchAndDisplayResults(students);
+            Console.WriteLine("Choose search option:");
+            Console.WriteLine("1. Search by course ID");
+            Console.WriteLine("2. Search by student name\n");
+            Console.Write("Enter your choice: ");
+
+            string choice;
+            while (true)
+            {
+                choice = Console.ReadLine();
+                if (choice == "1" || choice == "2")
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter 1 or 2.");
+                }
+            }
+
+            switch (choice)
+            {
+                case "1":
+                    int courseId;
+                    while (true)
+                    {
+                        Console.Write("\nEnter course ID: ");
+                        if (int.TryParse(Console.ReadLine(), out courseId))
+                        {
+                            // Search for students by course ID
+                            teilnehmer.SearchAndDisplayStudentsByCourseID(courseId);
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nInvalid input. Please enter a valid course ID.");
+                        }
+                    }
+                    break;
+
+                case "2":
+                    Console.Write("\nEnter student name: ");
+                    string studentName = Console.ReadLine();
+
+                    // Search for students by name
+                    teilnehmer.SearchAndDisplayStudentsByName(studentName);
+                    break;
+            }
         }
+
 
         private void ManageStudents()
         {

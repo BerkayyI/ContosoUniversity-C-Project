@@ -3,6 +3,7 @@ using System;
 using ContosoUniversity.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContosoUniversity.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20240324093009_UpdateStudentCourseRelationship")]
+    partial class UpdateStudentCourseRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.0");
@@ -77,6 +79,7 @@ namespace ContosoUniversity.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Grade")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("StudentID")

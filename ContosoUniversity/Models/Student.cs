@@ -1,23 +1,20 @@
 ﻿using ContosoUniversity.DAL;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace ContosoUniversity.Models
 {
     public class Student
     {
-        
         public int ID { get; set; }
         public string LastName { get; set; }
         public string FirstMidName { get; set; }
         public DateTime EnrollmentDate { get; set; }
         public DateTime BirthDate { get; set; }
-        public ICollection<Course> EnrolledCourses { get; set; }
+        public ICollection<Enrollment> Enrollments { get; set; }
         public string Email { get; set; }
-        
-
 
         public void ViewAllStudents(SchoolContext dbContext)
         {
@@ -54,86 +51,49 @@ namespace ContosoUniversity.Models
             }
 
             Console.WriteLine("Enter student's Email:");
-            string Email = Console.ReadLine();
+            string email = Console.ReadLine();
 
+            List<Enrollment> enrollments = new List<Enrollment>();
 
-            List<Course> enrolledCourses = new List<Course>();
-
-            // Prompt user to enter course details
             while (true)
             {
-                Console.WriteLine("Enter course title (or type 'done' to finish adding courses):");
-                string courseTitle = Console.ReadLine();
-                if (courseTitle.ToLower() == "done")
+                Console.WriteLine("Enter course ID (or type 'done' to finish adding courses):");
+                string input = Console.ReadLine();
+                if (input.ToLower() == "done")
                     break;
 
-                Console.WriteLine("Enter credits:");
-                if (!int.TryParse(Console.ReadLine(), out int credits))
+                if (!int.TryParse(input, out int courseId))
                 {
-                    Console.WriteLine("Invalid input for credits. Please enter a number.");
+                    Console.WriteLine("Invalid input for course ID. Please enter a number.");
                     continue;
                 }
 
-                Console.WriteLine("Enter department ID:");
-                if (!int.TryParse(Console.ReadLine(), out int departmentId))
+                var course = dbContext.Courses.FirstOrDefault(c => c.CourseID == courseId);
+                if (course == null)
                 {
-                    Console.WriteLine("Invalid input for department ID. Please enter a number.");
+                    Console.WriteLine($"Course with ID {courseId} not found.");
                     continue;
                 }
 
-                // Retrieve or create the course
-                Course course = RetrieveOrCreateCourse(dbContext, courseTitle, credits, departmentId);
-                enrolledCourses.Add(course);
+                enrollments.Add(new Enrollment { CourseID = courseId });
             }
-            
-            // Create new student object
+
             var newStudent = new Student
             {
                 LastName = lastName,
                 FirstMidName = firstName,
                 EnrollmentDate = enrollmentDate,
                 BirthDate = birthDate,
-                Email = Email,
-                EnrolledCourses = enrolledCourses
+                Email = email,
+                Enrollments = enrollments
             };
 
-
-
-            // Add student to database
             dbContext.Students.Add(newStudent);
             dbContext.SaveChanges();
             Console.WriteLine("Student added successfully.");
             Console.WriteLine("\nPress any key to continue...");
             Console.ReadLine();
             Console.Clear();
-        }
-
-        private Course RetrieveOrCreateCourse(SchoolContext dbContext, string courseTitle, int credits, int departmentId)
-        {
-            // Check if the course exists in the database
-            Course existingCourse = dbContext.Courses.FirstOrDefault(c => c.Title == courseTitle && c.Credits == credits && c.DepartmentID == departmentId);
-
-            if (existingCourse != null)
-            {
-                return existingCourse;
-            }
-            else
-            {
-                // Create a new course if it doesn't exist
-                var newCourse = new Course
-                {
-                    Title = courseTitle,
-                    Credits = credits,
-                    DepartmentID = departmentId
-                    // Add other properties for the course if needed...
-                };
-
-                // Add the new course to the database
-                dbContext.Courses.Add(newCourse);
-                dbContext.SaveChanges();
-
-                return newCourse;
-            }
         }
 
         public void UpdateStudent(SchoolContext dbContext)
@@ -145,7 +105,6 @@ namespace ContosoUniversity.Models
                 return;
             }
 
-            // Find student by ID
             var studentToUpdate = dbContext.Students.Find(studentId);
             if (studentToUpdate == null)
             {
@@ -179,7 +138,6 @@ namespace ContosoUniversity.Models
                 studentToUpdate.EnrollmentDate = enrollmentDate;
             }
 
-            // Update student in database
             dbContext.SaveChanges();
             Console.WriteLine("Student updated successfully.");
             Console.WriteLine("\nPress any key to continue...");
@@ -196,7 +154,6 @@ namespace ContosoUniversity.Models
                 return;
             }
 
-            // Find student by ID
             var studentToDelete = dbContext.Students.Find(studentId);
             if (studentToDelete == null)
             {
@@ -204,7 +161,6 @@ namespace ContosoUniversity.Models
                 return;
             }
 
-            // Remove student from database
             dbContext.Students.Remove(studentToDelete);
             dbContext.SaveChanges();
             Console.WriteLine("Student deleted successfully.");
@@ -212,10 +168,5 @@ namespace ContosoUniversity.Models
             Console.ReadLine();
             Console.Clear();
         }
-
-
     }
-
-    
-
 }

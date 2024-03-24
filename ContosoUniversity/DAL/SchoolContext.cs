@@ -25,8 +25,22 @@ namespace ContosoUniversity.DAL
             modelBuilder.Entity<CourseAssignment>().HasKey(c => c.CourseID);
             modelBuilder.Entity<Enrollment>().HasKey(c => c.EnrollmentId);
 
+            modelBuilder.Entity<Enrollment>()
+                .HasOne(e => e.Course)
+                .WithMany(c => c.Enrollments)
+                .HasForeignKey(e => e.CourseID)
+                .IsRequired();
+
+            modelBuilder.Entity<Enrollment>()
+                .HasOne(e => e.Student)
+                .WithMany(s => s.Enrollments)
+                .HasForeignKey(e => e.StudentID)
+                .IsRequired();
+
+
             base.OnModelCreating(modelBuilder);
         }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
