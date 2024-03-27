@@ -19,7 +19,7 @@ namespace ContosoUniversity
         {
             while (true)
             {
-                Console.WriteLine("Contoso University Admininstrator Management System");
+                Console.WriteLine("\nContoso University Admininstrator Management System");
                 Console.WriteLine("------------------------------------");
                 Console.WriteLine("1. Manage Students");
                 Console.WriteLine("2. Manage Courses");
@@ -31,6 +31,7 @@ namespace ContosoUniversity
                 int choice;
                 if (!int.TryParse(Console.ReadLine(), out choice))
                 {
+                    Console.Clear();
                     Console.WriteLine("Invalid input. Please enter a number.");
                     continue;
                 }
@@ -140,6 +141,7 @@ namespace ContosoUniversity
                 int choice;
                 if (!int.TryParse(Console.ReadLine(), out choice))
                 {
+                    Console.Clear();
                     Console.WriteLine("Invalid input. Please enter a number.");
                     continue;
                 }
@@ -222,8 +224,53 @@ namespace ContosoUniversity
 
         private void ManageInstructors()
         {
-            // Implement logic to manage instructors (CRUD operations, etc.)
-            Console.WriteLine("Manage Instructors");
+            Instructor instructor = new Instructor();
+
+            while (true)
+            {
+                Console.WriteLine("Instructor Management");
+                Console.WriteLine("---------------------");
+                Console.WriteLine("1. View All Instructors");
+                Console.WriteLine("2. Add Instructor");
+                Console.WriteLine("3. Update Instructor");
+                Console.WriteLine("4. Delete Instructor");
+                Console.WriteLine("5. Back to Main Menu");
+
+                int choice;
+                if (!int.TryParse(Console.ReadLine(), out choice))
+                {
+                    Console.Clear();
+                    Console.WriteLine("Invalid input. Please enter a number.");
+                    continue;
+                }
+
+                switch (choice)
+                {
+                    case 1:
+                        Console.Clear();
+                        instructor.ViewAllInstructors(dbContext);
+                        break;
+                    case 2:
+                        Console.Clear();
+                        instructor.AddInstructor(dbContext);
+                        break;
+                    case 3:
+                        Console.Clear();
+                        instructor.UpdateInstructor(dbContext);
+                        break;
+                    case 4:
+                        Console.Clear();
+                        instructor.DeleteInstructor(dbContext);
+                        break;
+                    case 5:
+                        Console.Clear();
+                        return;
+                    default:
+                        Console.Clear();
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
+            }
         }
 
         private void ManageDepartments()
