@@ -9,6 +9,7 @@ namespace ContosoUniversity
     {
         private SchoolContext dbContext = new SchoolContext();
 
+
         public static void Main(string[] args)
         {
             Program program = new Program();
@@ -19,56 +20,107 @@ namespace ContosoUniversity
         {
             while (true)
             {
-                Console.WriteLine("\nContoso University Admininstrator Management System");
-                Console.WriteLine("------------------------------------");
-                Console.WriteLine("1. Manage Students");
-                Console.WriteLine("2. Manage Courses");
-                Console.WriteLine("3. Manage Instructors");
-                Console.WriteLine("4. Manage Departments");
-                Console.WriteLine("5. Search Engine");
-                Console.WriteLine("6. Exit");
+                Console.Clear();
+                Console.WriteLine("************************************************************");
+                Console.WriteLine("*                   CONTOSO UNIVERSITY                     *");
+                Console.WriteLine("************************************************************");
+                Console.WriteLine("*                                                          *");
+                Console.WriteLine("*                    ADMINISTRATION MENU                   *");
+                Console.WriteLine("*                                                          *");
+                Console.WriteLine("*                                                          *");
+                Console.WriteLine("*  1. Manage Students                                      *");
+                Console.WriteLine("*  2. Manage Courses                                       *");
+                Console.WriteLine("*  3. Manage Instructors                                   *");
+                Console.WriteLine("*  4. Search Engine                                        *");
+                Console.WriteLine("*  5. Exit                                                 *");
+                Console.WriteLine("*                                                          *");
+                Console.WriteLine("************************************************************");
 
-                int choice;
-                if (!int.TryParse(Console.ReadLine(), out choice))
+                int selectedOption = 1;
+                bool isRunning = true;
+
+                while (isRunning)
                 {
-                    Console.Clear();
-                    Console.WriteLine("Invalid input. Please enter a number.");
-                    continue;
+                    Console.SetCursorPosition(0, 7);
+
+                    for (int i = 1; i <= 5; i++)
+                    {
+                        if (selectedOption == i)
+                        {
+                            Console.BackgroundColor = ConsoleColor.White;
+                            Console.ForegroundColor = ConsoleColor.Black;
+                        }
+                        else
+                        {
+                            Console.BackgroundColor = ConsoleColor.Black;
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+
+                        string optionLabel = GetOptionLabel(i);
+                        Console.WriteLine($"*  {i}. {optionLabel,-50} *");
+                    }
+
+                    ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                    ConsoleKey key = keyInfo.Key;
+
+                    if (key == ConsoleKey.UpArrow && selectedOption > 1)
+                        selectedOption--;
+                    else if (key == ConsoleKey.DownArrow && selectedOption < 5)
+                        selectedOption++;
+                    else if (key == ConsoleKey.Enter)
+                    {
+                        isRunning = false;
+                        Console.Clear();
+                        switch (selectedOption)
+                        {
+                            case 1:
+                                Console.WriteLine("You selected: Manage Students");
+                                ManageStudents();
+                                break;
+                            case 2:
+                                Console.WriteLine("You selected: Manage Courses");
+                                ManageCourses();
+                                break;
+                            case 3:
+                                Console.WriteLine("You selected: Manage Instructors");
+                                ManageInstructors();
+                                break;
+                            case 4:
+                                Console.WriteLine("Searching for students...");
+                                Teilnehmer teilnehmer = new Teilnehmer(dbContext);
+                                SearchStudents(teilnehmer);
+                                break;
+                            case 5:
+                                Console.WriteLine("Exiting the program...");
+                                return;
+                        }
+                        break;
+                    }
+
+                    Console.ResetColor();
+                    System.Threading.Thread.Sleep(100);
                 }
 
-                switch (choice)
-                {
-                    case 1:
-                        Console.Clear();
-                        ManageStudents();
-                        break;
-                    case 2:
-                        Console.Clear();
-                        ManageCourses();
-                        break;
-                    case 3:
-                        Console.Clear();
-                        ManageInstructors();
-                        break;
-                    case 4:
-                        Console.Clear();
-                        ManageDepartments();
-                        break;
-                    case 5:
-                        Console.Clear();
-                        
-                        Teilnehmer teilnehmer = new Teilnehmer(dbContext);
-                        SearchStudents(teilnehmer);
-                        break;
-                    case 6:
-                        Console.Clear();
-                        Console.WriteLine("Exiting the program...");
-                        return;
-                    default:
-                        Console.Clear();
-                        Console.WriteLine("Invalid choice. Please try again.");
-                        break;
-                }
+            }
+            
+        }
+
+        static string GetOptionLabel(int optionNumber)
+        {
+            switch (optionNumber)
+            {
+                case 1:
+                    return "Manage Students";
+                case 2:
+                    return "Manage Courses";
+                case 3:
+                    return "Manage Instructors";
+                case 4:
+                    return "Search Engine";
+                case 5:
+                    return "Exit";
+                default:
+                    return "Unknown Option";
             }
         }
 
@@ -273,11 +325,6 @@ namespace ContosoUniversity
             }
         }
 
-        private void ManageDepartments()
-        {
-            // Implement logic to manage departments (CRUD operations, etc.)
-            Console.WriteLine("Manage Departments");
-        }
 
     }
 }

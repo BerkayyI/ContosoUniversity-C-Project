@@ -47,7 +47,7 @@ namespace ContosoUniversity.DAL
             if (!optionsBuilder.IsConfigured)
             {
                 var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                var dbPath = @"C:\Users\Berkay\Source\Repos\ContosoUniversity-C-Project\ContosoUniversity\db\school.db";
+                var dbPath = @"C:\Users\benbe\source\repos\ContosoUniversity-C-Project\ContosoUniversity\db\school.db";
                 optionsBuilder.UseSqlite($"Data Source={dbPath}");
             }
 
