@@ -48,19 +48,36 @@ namespace ContosoUniversity.Models
                 Console.WriteLine($"Students enrolled in course {myCourse.Title}:");
 
                 List<Student> studentsInCourse = _db.Students
-                    .Include(s => s.Enrollments)
-                    .Where(s => s.Enrollments.Any(e => e.CourseID == courseID))
-                    .ToList();
+                .Include(s => s.Enrollments) // Include the Enrollments navigation property
+                .ThenInclude(e => e.Course)  // Include the Course navigation property within Enrollments
+                .Where(s => s.Enrollments.Any(e => e.CourseID == courseID))
+                .ToList();
 
-                foreach (Student student in studentsInCourse)
+
+                if (studentsInCourse.Count > 0)
                 {
-                    Console.WriteLine($"{student.LastName}, {student.FirstMidName}\n");
+                    foreach (Student student in studentsInCourse)
+                    {
+                        Console.WriteLine($"{student.LastName}, {student.FirstMidName}\n");
+
+                        Console.WriteLine("Course ID\tCourse Title\t\t\t\tCredits\tDepartment ID");
+                        foreach (var enrollment in student.Enrollments)
+                        {
+                            Console.WriteLine($"{enrollment.CourseID}\t        {enrollment.Course.Title.PadRight(35)}{enrollment.Course.Credits.ToString().PadLeft(10)}\t        {enrollment.Course.DepartmentID}");
+                        }
+                        Console.WriteLine();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No students found in this course.");
                 }
             }
             else
             {
                 Console.WriteLine("No course found with the given ID.");
             }
+
             Console.WriteLine("\nPress any key to continue...");
             Console.ReadLine();
             Console.Clear();

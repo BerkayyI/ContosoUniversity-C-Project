@@ -16,6 +16,7 @@ namespace ContosoUniversity
             program.Main_Menu();
         }
 
+        
         public void Main_Menu()
         {
             while (true)
@@ -28,11 +29,11 @@ namespace ContosoUniversity
                 Console.WriteLine("*                    ADMINISTRATION MENU                   *");
                 Console.WriteLine("*                                                          *");
                 Console.WriteLine("*                                                          *");
-                Console.WriteLine("*  1. Manage Students                                      *");
-                Console.WriteLine("*  2. Manage Courses                                       *");
-                Console.WriteLine("*  3. Manage Instructors                                   *");
-                Console.WriteLine("*  4. Search Engine                                        *");
-                Console.WriteLine("*  5. Exit                                                 *");
+                Console.WriteLine("*     Manage Students                                      *");
+                Console.WriteLine("*     Manage Courses                                       *");
+                Console.WriteLine("*     Manage Instructors                                   *");
+                Console.WriteLine("*     Search Engine                                        *");
+                Console.WriteLine("*     Exit                                                 *");
                 Console.WriteLine("*                                                          *");
                 Console.WriteLine("************************************************************");
 
@@ -57,7 +58,7 @@ namespace ContosoUniversity
                         }
 
                         string optionLabel = GetOptionLabel(i);
-                        Console.WriteLine($"*  {i}. {optionLabel,-50} *");
+                        Console.WriteLine($"*     {optionLabel,-50} *");
                     }
 
                     ConsoleKeyInfo keyInfo = Console.ReadKey(true);
@@ -86,10 +87,19 @@ namespace ContosoUniversity
                                 ManageInstructors();
                                 break;
                             case 4:
-                                Console.WriteLine("Searching for students...");
-                                Teilnehmer teilnehmer = new Teilnehmer(dbContext);
-                                SearchStudents(teilnehmer);
+                                bool searchAgain = true;
+                                do
+                                {
+                                    Console.WriteLine("\nSearching for students...");
+                                    Teilnehmer teilnehmer = new Teilnehmer(dbContext);
+                                    SearchStudents(teilnehmer);
+
+                                    Console.WriteLine("Do you want to search again? (yes/no)\n");
+                                    string response = Console.ReadLine();
+                                    searchAgain = response.ToLower() == "yes";
+                                } while (searchAgain);
                                 break;
+
                             case 5:
                                 Console.WriteLine("Exiting the program...");
                                 return;
